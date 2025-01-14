@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import Flask, Response
+from flask import Flask, make_response
 
 app = Flask(__name__)
 
@@ -17,7 +17,7 @@ def print_string(str):
 def count(param):
     numbers = "\n".join(str(i) for i in range(param))
     result = f"{numbers}\n"
-    return Response(result, mimetype="text/plain")
+    return make_response(result)
 
 @app.route('/math/<int:num1>/<operation>/<int:num2>')
 def math(num1, operation,num2):
@@ -31,21 +31,21 @@ def math(num1, operation,num2):
             result = num1 * num2
         elif operation == 'div':
             if num2 == 0:
-                return Response("Division by zero is not allowed.", status=400, mimetype="text/plain")
+                return make_response("Division by zero is not allowed.", status=400)
             result = num1 / num2
         elif operation == '%':
             if num2 == 0:
-                return Response("Modulo by zero is not allowed.", status=400, mimetype="text/plain")
+                return make_response("Modulo by zero is not allowed.", status=400)
             result = num1 % num2
         else:
-            return Response("Invalid operation. Supported operations are +, -, *, div, and %.", status=400, mimetype="text/plain")
+            return make_response("Invalid operation. Supported operations are +, -, *, div, and %.", status=400)
         
         
-        return Response(str(result), mimetype="text/plain")
+        return make_response(str(result))
 
     except Exception as e:
         
-        return Response(f"Error: {e}", status=500, mimetype="text/plain")
+        return make_response(f"Error: {e}", status=500)
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
